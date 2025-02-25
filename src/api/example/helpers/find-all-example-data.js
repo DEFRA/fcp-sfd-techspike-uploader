@@ -4,7 +4,7 @@
  * @param { Db } db
  * @returns {Promise<WithId<Document>[]>}
  */
-function findAllExampleData(db) {
+function findAllExampleData (db) {
   const cursor = db
     .collection('example-data')
     .find({}, { projection: { _id: 0 } })
