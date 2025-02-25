@@ -24,21 +24,41 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
+<<<<<<< HEAD
           node-version: 20
           cache: npm
 
       # Ensure tests pass. Add more checks if required
       - run: npm ci
       - run: npm test
+=======
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Run Tests
+        run: |
+          mkdir -p coverage
+          chmod -R a+rw ./coverage
+          docker compose -f docker-compose.yaml -f docker-compose.test.yaml run --rm "fcp-sfd-data"
+>>>>>>> upstream/main
 
       - name: Publish Hot Fix
         uses: DEFRA/cdp-build-action/build-hotfix@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
+<<<<<<< HEAD
 #     - run: npm install && npm test
 #     - name: SonarCloud Scan
 #       uses: SonarSource/sonarcloud-github-action@master
 #       env:
 #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+=======
+      - name: SonarQubeScan
+        uses: SonarSource/sonarqube-scan-action@v4
+        env: 
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+>>>>>>> upstream/main
