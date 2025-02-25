@@ -1,9 +1,9 @@
 services:
-  fcp-sfd-data:
+  backend:
     build:
       target: development
-    image: fcp-sfd-data-development
-    container_name: fcp-sfd-data-development
+    image: fcp-sfd-techspike-uploader-development
+    container_name: fcp-sfd-techspike-uploader-development
     ports:
       - '3001:3001'
     links:
@@ -15,8 +15,7 @@ services:
       mongodb:
         condition: service_started
     volumes:
-      - ./src/:/home/node/src
-      - ./package.json:/home/node/package.json
+      - ./:/home/node
     env_file:
       - .env
     environment:

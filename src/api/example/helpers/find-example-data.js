@@ -5,7 +5,7 @@
  * @param { string } id
  * @returns {Promise<WithId<Document> | null>}
  */
-function findExampleData(db, id) {
+function findExampleData (db, id) {
   return db
     .collection('example-data')
     .findOne({ exampleId: id }, { projection: { _id: 0 } })
