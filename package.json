@@ -13,7 +13,12 @@
     "test:watch": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest --coverage --verbose --runInBand",
     "test:lint": "standard",
     "start:watch": "nodemon --watch src --exec 'node --experimental-vm-modules src/index.js'",
-    "start": "node --experimental-vm-modules src/index.js"
+    "start": "node --experimental-vm-modules src/index.js",
+    "example": "docker compose exec development node",
+    "example:upload": "npm run example src/cdp-uploader-examples/upload-example.js",
+    "example:multiple": "npm run example src/cdp-uploader-examples/upload-example-multiple.js",
+    "example:virus": "npm run example src/cdp-uploader-examples/upload-example-virus.js",
+    "example:sync": "npm run example src/cdp-uploader-examples/upload-example-sync.js"
   },
   "author": "Defra DDTS",
   "contributors": [
