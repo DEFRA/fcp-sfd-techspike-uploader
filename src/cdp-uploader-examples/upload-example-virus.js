@@ -1,11 +1,12 @@
-import { CdpUploaderClient } from '../services/cdp-uploader-client.js'
+import { CdpUploaderClient } from '../cdp-uploader/cdp-uploader-client.js'
 
 async function uploadExample () {
   try {
     // Create an instance of the uploader client with necessary configuration.
     const client = new CdpUploaderClient({
-      baseUrl: 'http://localhost:7337',
-      s3Bucket: 'my-bucket'
+      baseUrl: 'http://cdp-uploader:7337', // Use Docker service name
+      s3Bucket: 'my-bucket',
+      redirectUrl: 'http://development:3001/health' // Use Docker service name
     })
 
     // Step 1: Initiate the upload process.

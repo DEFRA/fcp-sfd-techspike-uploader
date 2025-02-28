@@ -8,26 +8,37 @@
 import FormData from 'form-data' // multipart formdata
 import fetch from 'node-fetch'
 
-const baseUrl = 'http://localhost:7337'
-const s3Bucket = 'my-bucket'
-
 export class CdpUploaderClient {
+  constructor (config = {}) {
+    this.baseUrl = new URL(config.baseUrl || 'http://cdp-uploader:7337')
+    this.s3Bucket = config.s3Bucket || 'fcp-sfd-uploads'
+    this.redirectUrl = config.redirectUrl || 'http://development:3001/health'
+  }
+
   // Set up client with config or use defaults
   // Step 1: Start upload process & get URLs
   async initiate (metadata = {}) {
     // Send request to start a new upload
-    const response = await fetch(`${baseUrl}/initiate`, {
+    const response = await fetch(new URL('initiate', this.baseUrl), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        redirect: `${baseUrl}/health`, // Where to redirect after upload
-        s3Bucket, // Target bucket
+        redirect: this.redirectUrl, // Where to redirect after upload
+        s3Bucket: this.s3Bucket, // Target bucket
         metadata // Any extra info to store
       })
     })
 
-    // Return response with uploadUrl and statusUrl
-    return await response.json()
+    // Get response and resolve URLs relative to base URL
+    const result = await response.json()
+    const { pathname: uploadPath } = new URL(result.uploadUrl)
+    const { pathname: statusPath } = new URL(result.statusUrl)
+
+    return {
+      ...result,
+      uploadUrl: new URL(uploadPath, this.baseUrl).toString(),
+      statusUrl: new URL(statusPath, this.baseUrl).toString()
+    }
   }
 
   // Step 2: Upload the actual file
