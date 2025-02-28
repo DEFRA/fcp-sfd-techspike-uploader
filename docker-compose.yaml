@@ -1,5 +1,5 @@
 services:
-  backend:
+  development:
     build:
       target: development
     image: fcp-sfd-techspike-uploader-development
