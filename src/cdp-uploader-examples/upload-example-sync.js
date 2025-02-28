@@ -11,20 +11,38 @@ async function uploadExample () {
 
     console.log('Starting synchronous upload...')
 
-    // Single file example
+    // Single file example with metadata
     const singleResult = await client.uploadSync(
       Buffer.from('Test file content'),
-      { customerId: '12345', requestId: 'sync-example-single' }
+      {
+        customerId: '12345',
+        requestId: 'sync-example-single',
+        fileName: 'test.txt',
+        fileType: 'text/plain',
+        uploadedAt: new Date().toISOString(),
+        source: 'sync-example',
+        environment: 'development'
+      }
     )
     console.log('Single file upload complete:', singleResult)
 
-    // Multiple files example
+    // Multiple files example with metadata
     const multipleResult = await client.uploadSync(
       [
         Buffer.from('First file content'),
         Buffer.from('Second file content')
       ],
-      { customerId: '12345', requestId: 'sync-example-multiple' }
+      {
+        customerId: '12345',
+        requestId: 'sync-example-multiple',
+        fileCount: 2,
+        fileTypes: ['text/plain', 'text/plain'],
+        fileNames: ['first.txt', 'second.txt'],
+        uploadedAt: new Date().toISOString(),
+        source: 'sync-example',
+        environment: 'development',
+        batchId: 'batch-' + Date.now()
+      }
     )
     console.log('Multiple files upload complete:', multipleResult)
   } catch (err) {
