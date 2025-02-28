@@ -10,7 +10,9 @@ export const uploadRoutes = {
         handler: async (request, h) => {
           try {
             const client = new CdpUploaderSyncClient()
-            const result = await client.uploadSync(request.payload.file)
+            // Extract file and pass remaining fields as form data
+            const { file, ...formFields } = request.payload
+            const result = await client.uploadSync(file, formFields)
             return h.response(result)
           } catch (error) {
             console.error('Upload failed:', error)

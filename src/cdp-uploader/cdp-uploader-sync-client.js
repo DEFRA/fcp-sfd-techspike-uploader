@@ -16,16 +16,14 @@ export class CdpUploaderSyncClient {
   }
 
   // Step 1: Start upload process & get URLs
-  async initiate (metadata = {}) {
+  async initiate () {
     // Send request to start a new upload
-    console.log('Initiating upload with metadata:', JSON.stringify(metadata, null, 2))
     const response = await fetch(new URL('initiate', this.baseUrl), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         redirect: this.redirectUrl, // Where to redirect after upload
-        s3Bucket: this.s3Bucket, // Target bucket
-        metadata // Any extra info to store
+        s3Bucket: this.s3Bucket // Target bucket
       })
     })
 
@@ -47,8 +45,13 @@ export class CdpUploaderSyncClient {
   }
 
   // Step 2: Upload the file(s)
-  async uploadFile (uploadUrl, files) {
+  async uploadFile (uploadUrl, files, formFields = {}) {
     const form = new FormData()
+
+    // Add all form fields
+    Object.entries(formFields).forEach(([key, value]) => {
+      form.append(key, value)
+    })
 
     // Handle both single files and arrays of files
     if (Array.isArray(files)) {
@@ -96,7 +99,10 @@ export class CdpUploaderSyncClient {
       const status = await this.checkStatus(statusUrl)
 
       if (status.uploadStatus === 'ready' || status.uploadStatus === 'rejected') {
-        return status
+        return {
+          uploadStatus: status.uploadStatus,
+          form: status.form
+        }
       }
 
       await new Promise(resolve => setTimeout(resolve, interval))
@@ -111,13 +117,13 @@ export class CdpUploaderSyncClient {
    * This is the main method that differentiates this client from the base client,
    * combining the three steps (initiate, upload, wait) into a single operation.
    */
-  async uploadSync (files, metadata = {}) {
+  async uploadSync (files, formFields = {}) {
     try {
       // Step 1: Initiate the upload
-      const { uploadUrl, statusUrl } = await this.initiate(metadata)
+      const { uploadUrl, statusUrl } = await this.initiate()
 
-      // Step 2: Upload file(s)
-      await this.uploadFile(uploadUrl, files)
+      // Step 2: Upload file(s) with form fields
+      await this.uploadFile(uploadUrl, files, formFields)
       console.log('Files uploaded, waiting for processing...')
 
       // Step 3: Wait for completion and return final result
