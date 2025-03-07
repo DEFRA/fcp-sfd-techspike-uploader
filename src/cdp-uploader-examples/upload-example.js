@@ -14,10 +14,10 @@ async function uploadExample () {
     const init = await client.initiate({ customerId: '12345', requestId: 'example-1' })
     console.log('Initiated:', init)
 
-    // Step 2: Upload the file using the URL from the initiation step.
+    // Step 2: Upload the file using the URL from the initiation step
     await client.uploadFile(
       init.uploadUrl,
-      Buffer.from('Test file content'), // Convert test content to a buffer.
+      Buffer.from('Test file content'), // Convert test content to a buffer
       'test-file.txt'
     )
     console.log('File uploaded')
