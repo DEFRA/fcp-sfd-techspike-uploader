@@ -34,7 +34,7 @@ async function uploadExample () {
       console.log('File location:', file.s3Bucket, file.s3Key)
     }
   } catch (err) {
-    // Log any errors encountered during the upload process.
+    // Log any errors encountered during the upload process
     console.error('Upload failed:', err.message)
   }
 }
