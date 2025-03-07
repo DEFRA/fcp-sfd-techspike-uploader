@@ -2,7 +2,7 @@
   "name": "fcp-sfd-techspike-uploader",
   "version": "0.0.0",
   "description": "CDP Backend Template",
-  "main": ".server/index.js",
+  "main": "src/index.js",
   "type": "module",
   "engines": {
     "node": ">=22"
@@ -13,7 +13,12 @@
     "test:watch": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest --coverage --verbose --runInBand",
     "test:lint": "standard",
     "start:watch": "nodemon --watch src --exec 'node --experimental-vm-modules src/index.js'",
-    "start": "node --experimental-vm-modules src/index.js"
+    "start": "node --experimental-vm-modules src/index.js",
+    "example": "docker compose exec development node",
+    "example:upload": "npm run example src/cdp-uploader-examples/upload-example.js",
+    "example:multiple": "npm run example src/cdp-uploader-examples/upload-example-multiple.js",
+    "example:virus": "npm run example src/cdp-uploader-examples/upload-example-virus.js",
+    "example:sync": "npm run example src/cdp-uploader-examples/upload-example-sync.js"
   },
   "author": "Defra DDTS",
   "contributors": [
@@ -28,6 +33,7 @@
     "aws-embedded-metrics": "4.2.0",
     "aws4": "1.13.2",
     "convict": "6.2.4",
+    "form-data": "4.0.2",
     "global-agent": "3.0.0",
     "hapi-pino": "12.1.0",
     "hapi-pulse": "3.0.1",
@@ -54,5 +60,10 @@
     "nodemon": "3.1.7",
     "npm-run-all": "4.1.5",
     "standard": "17.1.2"
+  },
+  "standard": {
+    "env": [
+      "jest"
+    ]
   }
 }
